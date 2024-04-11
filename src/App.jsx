@@ -4,10 +4,10 @@ import Home from './components/Home.jsx';
 import Navbar from './components/Navbar.jsx';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-//<Navbar className= "w-full"/>
 function App() {
     return (
         <BrowserRouter>
+            <Navbar className= "w-full"/>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/project" element={<Home />} />
