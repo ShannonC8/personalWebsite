@@ -1,45 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { useSpring, animated } from 'react-spring';
+import React, { useEffect } from 'react';
+import './Home.css';
+import image from '../assets/IMG_9889.jpg';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const Home = () => {
-    const [animate, setAnimate] = useState(false);
+function Home() {
 
     useEffect(() => {
-        setAnimate(true);
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.create({
+            trigger: ".website-content",
+            start: "-20% top",
+            end: "bottom bottom",
+            onEnter: () => {
+                gsap.set(".website-content", { position: 'absolute', top: '256%' });
+            },
+            onLeaveBack: () => {
+                gsap.set(".website-content", { position: 'fixed', top: '0' });
+            }
+        });
+
+        gsap.to(".header .letters:first-child", {
+            x: () => -window.innerWidth * 3,
+            scale: 10,
+            ease: "power2.inOut",
+            scrollTrigger: { start: "top top", end: "+=200%", scrub: 1 }
+        });
+
+        gsap.to(".header .letters:last-child", {
+            x: () => window.innerWidth * 3,
+            scale: 10,
+            ease: "power2.inOut",
+            scrollTrigger: { start: "top top", end: "+=200%", scrub: 1 }
+        });
+
+        gsap.to(".img-holder", {
+            rotation: 0,
+            scale: 5,
+            //scale: 1,
+            ease: "power2.inOut",
+            scrollTrigger: { start: "top top", end: '+=200%', scrub: 1 }
+        });
+
     }, []);
 
-    const text = "Hi! I'm Shannon";
-    const characters = text.split('');
-
-    const animationProps = characters.map((char, index) => {
-        const delay = index * 40;
-        return useSpring({
-            from: { transform: 'translateY(0px)' },
-            to: async (next) => {
-                await next({ transform: 'translateY(-20px)', delay });
-                await next({ transform: 'translateY(0px)' });
-            },
-            config: { tension: 100, friction: 10 },
-            immediate: animate,
-        });
-    });
-
-
     return (
-        <div className="w-screen h-screen flex items-center justify-center bg-gray-200">
-            <div>
-                {characters.map((char, index) => (
-                    <animated.span
-                        key={index}
-                        style={animationProps[index]}
-                        className="text-3xl font-semibold text-gray-800 mb-4 p-1 inline-block"
-                    >
-                        {char}
-                    </animated.span>
-                ))}
+        <div className="h-screen">
+            <div className="header fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-full z-50">
+                <div className="letters flex flex-row">
+                    <div>HI, IM</div>
+                </div>
+                <div className="letters flex flex-row">
+                    <div>SHANNON</div>
+                </div>
+            </div>
+            <div className="website-content fixed top-0 w-full min-h-screen">
+                <div className="img-holder fixed">
+                    <img src={image} alt={""} className="image" />
+                </div>
+                <div className="content-holder relative top-[-5px] w-full bg-black text-white h-[300vh]">
+                    <div className="row">
+                        <h1>Im Cool</h1>
+                    </div>
+                    <div className="row">
+                        <h1>ur Cool</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );
-};
+}
 
 export default Home;
